@@ -34,3 +34,10 @@ desktop.ini
 # Environment variables
 .env
 .env.local
+# Python virtual environments
+.venv/
+venv/
+
+# Python cache
+__pycache__/
+*.pyc
