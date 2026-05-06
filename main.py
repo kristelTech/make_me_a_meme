@@ -170,90 +170,64 @@ class MemeMatcher:
         self.last_features = features
         return features
 
+# Live with DataCamp
     def _compute_features(self, landmark_array, hand_res):
-        # Eye aspect ratios
-        def ear(upper, lower):
-            vert = np.linalg.norm(landmark_array[upper] - landmark_array[lower], axis=1).mean()
-            horiz = np.linalg.norm(landmark_array[upper[0]] - landmark_array[upper[-1]])
-            return vert / (horiz + 1e-6)
+        #TODO Eye aspect ratios with DataCamp
 
-        left_ear = ear(self.LEFT_EYE_UPPER, self.LEFT_EYE_LOWER)
-        right_ear = ear(self.RIGHT_EYE_UPPER, self.RIGHT_EYE_LOWER)
-        avg_ear = (left_ear + right_ear) / 2.0
 
-        # Mouth
-        mouth_top, mouth_bottom = landmark_array[13], landmark_array[14]
-        mouth_height = np.linalg.norm(mouth_top - mouth_bottom)
-        mouth_left, mouth_right = landmark_array[61], landmark_array[291]
-        mouth_width = np.linalg.norm(mouth_left - mouth_right)
-        mouth_ar = mouth_height / (mouth_width + 1e-6)
-        inner_width = np.linalg.norm(landmark_array[78] - landmark_array[308])
-        mouth_width_ratio = inner_width / (mouth_width + 1e-6)
+        # TODO Mouth with DataCamp
 
-        # Eyebrows
-        left_brow_y = landmark_array[self.LEFT_EYEBROW][:, 1].mean()
-        right_brow_y = landmark_array[self.RIGHT_EYEBROW][:, 1].mean()
-        left_eye_center = landmark_array[self.LEFT_EYE_UPPER + self.LEFT_EYE_LOWER][:, 1].mean()
-        right_eye_center = landmark_array[self.RIGHT_EYE_UPPER + self.RIGHT_EYE_LOWER][:, 1].mean()
-        left_brow_h = left_eye_center - left_brow_y
-        right_brow_h = right_eye_center - right_brow_y
-        avg_brow_h = (left_brow_h + right_brow_h) / 2.0
 
-        mouth_center_y = (mouth_left[1] + mouth_right[1]) / 2.0
-        nose_tip = landmark_array[self.NOSE_TIP]
-        mouth_elev = nose_tip[1] - mouth_center_y
 
-        # Hands
-        num_hands = len(hand_res.hand_landmarks) if hand_res.hand_landmarks else 0
-        hand_raised = 0.0
-        if num_hands > 0:
-            face_center = landmark_array[:, 1].mean()
-            face_top = landmark_array[:, 1].min()
-            wrist_y = np.array([h[0].y for h in hand_res.hand_landmarks])
-            middle_y = np.array([h[12].y for h in hand_res.hand_landmarks])
-            if np.any((middle_y < face_center + 0.2) | (wrist_y < face_top + 0.3)):
-                hand_raised = 1.0
+        # #eyebrows
+        # left_brow_y = landmark_array[self.LEFT_EYEBROW][:, 1].mean()
+        # right_brow_y = landmark_array[self.RIGHT_EYEBROW][:, 1].mean()
+        # left_eye_center = landmark_array[self.LEFT_EYE_UPPER + self.LEFT_EYE_LOWER][:, 1].mean()
+        # right_eye_center = landmark_array[self.RIGHT_EYE_UPPER + self.RIGHT_EYE_LOWER][:, 1].mean()
+        # left_brow_h = left_eye_center - left_brow_y
+        # right_brow_h = right_eye_center - right_brow_y
+        # avg_brow_h = (left_brow_h + right_brow_h) / 2.0
+        #
+        # mouth_center_y = (mouth_left[1] + mouth_right[1]) / 2.0
+        # nose_tip = landmark_array[self.NOSE_TIP]
+        # mouth_elev = nose_tip[1] - mouth_center_y
 
-        # Features
-        return {
-            'eye_openness': avg_ear,
-            'left_eye_open': left_ear,
-            'right_eye_open': right_ear,
-            'eyes_symmetry': abs(left_ear - right_ear),
-            'mouth_openness': mouth_ar,
-            'mouth_width': mouth_width,
-            'mouth_width_ratio': mouth_width_ratio,
-            'mouth_elevation': mouth_elev,
-            'eyebrow_height': avg_brow_h,
-            'left_brow_height': left_brow_h,
-            'right_brow_height': right_brow_h,
-            'brow_symmetry': abs(left_brow_h - right_brow_h),
-            'num_hands': num_hands,
-            'hand_raised': hand_raised,
-            'surprise_score': avg_ear * avg_brow_h * mouth_ar,
-            'smile_score': mouth_width_ratio * (1.0 - mouth_ar),
-            'concern_score': avg_brow_h * (1.0 - mouth_elev),
-            'cheers_score': mouth_width_ratio * (1.0 - mouth_ar) * hand_raised
-        }
+        #TODO Hands with DataCamp
+
+        # return {
+        #     'eye_openness': avg_ear,
+        #     'left_eye_open': left_ear,
+        #     'right_eye_open': right_ear,
+        #     'eyes_symmetry': abs(left_ear - right_ear),
+        #     'mouth_openness': mouth_ar,
+        #     'mouth_width': mouth_width,
+        #     'mouth_width_ratio': mouth_width_ratio,
+        #     'mouth_elevation': mouth_elev,
+        #     'eyebrow_height': avg_brow_h,
+        #     'left_brow_height': left_brow_h,
+        #     'right_brow_height': right_brow_h,
+        #     'brow_symmetry': abs(left_brow_h - right_brow_h),
+        #     'num_hands': num_hands,
+        #     'hand_raised': hand_raised,
+        #     'surprise_score': avg_ear * avg_brow_h * mouth_ar,
+        #     'smile_score': mouth_width_ratio * (1.0 - mouth_ar),
+        #     'concern_score': avg_brow_h * (1.0 - mouth_elev),
+        #     'cheers_score': mouth_width_ratio * (1.0 - mouth_ar) * hand_raised
+        # }
+
+                pass
+
+
 
     # ---------------- Vectorized Similarity ----------------
-    def compute_similarity(self, features1, features2):
-        if features1 is None or features2 is None:
-            return 0.0
-        vec1 = np.array([features1[k] for k in self.feature_keys])
-        vec2 = np.array([features2[k] for k in self.feature_keys])
-        diff = np.abs(vec1 - vec2)
-        similarity = np.exp(-diff * self.feature_factors)
-        return float(np.sum(self.feature_weights * similarity))
 
-    def find_best_match(self, user_features):
-        if user_features is None:
-            return None, 0.0
-        scores = np.array([self.compute_similarity(user_features, mf) for mf in self.meme_features])
-        if len(scores) == 0:
-            return None, 0.0
-        best_idx = int(np.argmax(scores))
-        return self.memes[best_idx], scores[best_idx]
+#TODO compute_similarity with DataCamp
+    def compute_similarity(self):
+        pass
+
+# TODO find_best_match with DataCamp
+    def find_best_match(self,user_features):
+        pass
 
     # ---------------- Main Loop ----------------
     def run(self):
