@@ -8,7 +8,7 @@ import os
 
 
 class MemeMatcher:
-    # MediaPipe landmark indices
+    # MediaPipe landmark indices. More information here: https://www.sanderdesnaijer.com/blog/mediapipe-face-mesh-landmarks
     LEFT_EYE_UPPER = [159, 145, 158]
     LEFT_EYE_LOWER = [23, 27, 133]
     RIGHT_EYE_UPPER = [386, 374, 385]
@@ -139,36 +139,11 @@ class MemeMatcher:
             pickle.dump((self.memes, self.meme_features), f)
         print(f"Total memes loaded: {len(self.memes)}\n")
 
+
     # ---------------- Feature Extraction ----------------
-    def extract_face_features(self, image, is_static=False):
-        if is_static:
-            face_landmarker = self.face_mesh_image
-            hand_landmarker = self.hand_detector_image
-        else:
-            face_landmarker = self.face_mesh_video
-            hand_landmarker = self.hand_detector_video
-
-        rgb = cv2.cvtColor(image, cv2.COLOR_BGR2RGB)
-        mp_image = mp.Image(image_format=mp.ImageFormat.SRGB, data=rgb)
-
-        if is_static:
-            face_res = face_landmarker.detect(mp_image)
-            hand_res = hand_landmarker.detect(mp_image)
-        else:
-            self.frame_counter += 1
-            if self.frame_counter % self.frame_skip != 0:
-                return getattr(self, "last_features", None)
-            face_res = face_landmarker.detect_for_video(mp_image, self.frame_counter)
-            hand_res = hand_landmarker.detect_for_video(mp_image, self.frame_counter)
-
-        if not face_res.face_landmarks:
-            return None
-
-        landmarks = face_res.face_landmarks[0]
-        landmark_array = np.array([[l.x, l.y] for l in landmarks])
-        features = self._compute_features(landmark_array, hand_res)
-        self.last_features = features
-        return features
+    def extract_face_features(self):
+        # TODO Feature Extraction with DataCamp
+        pass
 
 # Live with DataCamp
     def _compute_features(self, landmark_array, hand_res):
