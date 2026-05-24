@@ -169,6 +169,19 @@ class MemeMatcher:
 
         #TODO Hands with DataCamp
 
+        # # Hands
+        # num_hands = len(hand_res.hand_landmarks) if hand_res.hand_landmarks else 0
+        # # This starts as zero, meaning no raised hand has been detected yet.
+        # hand_raised = 0.0
+        # # This block only runs if at least one hand was detected.
+        # if num_hands > 0:
+        #     face_center = landmark_array[:, 1].mean()
+        #     face_top = landmark_array[:, 1].min()
+        #     wrist_y = np.array([h[0].y for h in hand_res.hand_landmarks])
+        #     middle_y = np.array([h[12].y for h in hand_res.hand_landmarks])
+        #     if np.any((middle_y < face_center + 0.2) | (wrist_y < face_top + 0.3)):
+        #         hand_raised = 1.0
+
         # return {
         #     'eye_openness': avg_ear,
         #     'left_eye_open': left_ear,
