@@ -6,6 +6,10 @@ A real-time computer vision application that matches your facial expressions and
 
 Point your webcam at yourself, make different facial expressions and hand gestures, and watch as the app finds the meme that best matches your expression in real-time! The matched meme appears side-by-side with your camera feed.
 
+## Video Demo
+
+[![Meme Matcher video demo](video_demo.gif)]
+
 ##  Features
 
 - **Real-time Face Detection**: Uses MediaPipe Face Landmarker to track 478 facial landmarks
@@ -111,4 +115,3 @@ This project is for educational and entertainment purposes.
 - [ ] Mobile app version
 
 ---
-
