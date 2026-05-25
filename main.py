@@ -145,6 +145,20 @@ class MemeMatcher:
         # TODO Feature Extraction with DataCamp
         pass
 
+        # if not face_res.face_landmarks:
+        #     return None
+
+        # landmarks = face_res.face_landmarks[0]
+        #
+        # landmarks_array = np.array([[l.x,l.y] for l in landmarks])
+        #
+        # features = self._compute_features(landmarks_array, hand_res)
+        #
+        # self.last_features = features
+
+        # return features
+
+
 # Live with DataCamp
     def _compute_features(self, landmark_array, hand_res):
         #TODO Eye aspect ratios with DataCamp
